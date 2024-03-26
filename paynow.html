@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pay Now Page</title>
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        #pay-now-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #3498db;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Pay Now Page</h1>
+
+    <!-- Display payment amount and description -->
+    <p>Total Amount: $50.00</p>
+    <p>Product Description: Awesome Product</p>
+
+    <!-- Stripe "Pay Now" button -->
+    <button id="pay-now-button">Pay Now</button>
+
+    <script>
+        // Set your Stripe public key
+        const stripe = Stripe('YOUR_STRIPE_PUBLIC_KEY');
+
+        document.getElementById('pay-now-button').addEventListener('click', async () => {
+            try {
+                // Create a payment intent on the server
+                const response = await fetch('/create-payment-intent', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        items: [{ id: 'product_123', quantity: 1 }], // Replace with your product details
+                    }),
+                });
+
+                const { clientSecret } = await response.json();
+
+                // Confirm the payment on the client side
+                const result = await stripe.confirmCardPayment(clientSecret, {
+                    payment_method: {
+                        card: stripe.elements.create('card'),
+                        billing_details: {
+                            name: 'John Doe', // Replace with customer's name
+                        },
+                    },
+                });
+
+                if (result.paymentIntent.status === 'succeeded') {
+                    // Payment succeeded
+                    alert('Payment successful! Thank you for your purchase.');
+                } else {
+                    // Payment failed
+                    alert('Payment failed. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        });
+    </script>
+
+</body>
+</html>

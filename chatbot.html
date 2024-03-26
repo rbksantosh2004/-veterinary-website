@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veterinary Services Chatbot</title>
+    <style>
+        /* Add your custom styles here */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #chat-container {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            overflow-y: auto;
+            height: 300px;
+        }
+        #user-input, #submit-btn {
+            width: 100%;
+            padding: 8px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        <div id="chat-log"></div>
+    </div>
+    <input type="text" id="user-input" placeholder="Type your message...">
+    <button id="submit-btn" onclick="sendMessage()">Send</button>
+
+    <script>
+        function sendMessage() {
+            var userInput = document.getElementById('user-input').value;
+            document.getElementById('chat-log').innerHTML += '<p><strong>User:</strong> ' + userInput + '</p>';
+            
+            // Check for specific symptoms
+            if (containsSymptom(userInput, 'lumpy skin')) {
+                document.getElementById('chat-log').innerHTML += '<p><strong>Bot:</strong> Does it also have swollen lymph glands?</p>';
+            } else if (containsSymptom(userInput, 'yes')) {
+                document.getElementById('chat-log').innerHTML += '<p><strong>Bot:</strong> It may be a condition related to lumpy skin disease.</p>';
+            } else if (containsSymptom(userInput,'no')) {
+                document.getElementById('chat-log').innerHTML += '<p><strong>Bot:</strong> There is no chance of lumpy disease skin,no worries </p>';
+            } else if (containsSymptom(userInput, 'difficulty breathing')) {
+                document.getElementById('chat-log').innerHTML += '<p><strong>Bot:</strong> Did you observe difficulty in swallowing and abnormal behaviour. </p>';
+            } else if (containsSymptom(userInput, 'yes')) {
+                document.getElementById('chat-log').innerHTML += '<p><strong>Bot:</strong>It may be a condition related to rabies</p>';
+            } else if (containsSymptom(userInput, 'no')) {
+                document.getElementById('chat-log').innerHTML += '<p><strong>Bot:</strong>It might not be rabies,no worries </p>';
+            } else if (containsSymptom(userInput, 'flu like symptoms')) {
+                document.getElementById('chat-log').innerHTML += '<p><strong>Bot:</strong>Did you observe nausea and coughing up blood </p>'; 
+            } else if (containsSymptom(userInput, 'yes')) {
+                document.getElementById('chat-log').innerHTML += '<p><strong>Bot:</strong>There are high chances of anthrax disease </p>';
+            }  else if (containsSymptom(userInput, 'no')) {
+                document.getElementById('chat-log').innerHTML += '<p><strong>Bot:</strong>It might not be anthrax,no worries </p>';  
+            } else {
+                // Handle other cases or call an API for more advanced processing
+                document.getElementById('chat-log').innerHTML += '<p><strong>Bot:</strong> I\'m sorry, I couldn\'t understand that. Please provide more details.</p>';
+            }
+            
+            // Clear the user input field
+            document.getElementById('user-input').value = '';
+            // Scroll to the bottom of the chat log
+            document.getElementById('chat-container').scrollTop = document.getElementById('chat-container').scrollHeight;
+        }
+
+        function containsSymptom(input, symptom) {
+            // Check if the user input contains the specified symptom
+            return input.toLowerCase().includes(symptom.toLowerCase());
+        }
+    </script>
+</body>
+</html>

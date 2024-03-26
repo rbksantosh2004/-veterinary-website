@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Drop Box</title>
+    <style>
+        #dropbox {
+            width: 300px;
+            height: 200px;
+            border: 2px dashed #3498db;
+            text-align: center;
+            padding: 10px;
+            margin: 50px auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-section-heading">
+        <h1> Disease Identification System: Upload the picture of your animal to identify disease </h1>
+    </div>
+
+    <div id="dropbox" ondrop="drop(event)" ondragover="allowDrop(event)">
+        <p>Drop files here or click to upload</p>
+    </div>
+
+    <script>
+        function allowDrop(event) {
+            event.preventDefault();
+            // Highlight the drop area
+            document.getElementById("dropbox").style.border = "2px dashed #2c3e50";
+        }
+
+        function drop(event) {
+            event.preventDefault();
+            // Remove the highlight from the drop area
+            document.getElementById("dropbox").style.border = "2px dashed #3498db";
+
+            var files = event.dataTransfer.files;
+            handleFiles(files);
+        }
+
+        function handleFiles(files) {
+            var output = [];
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                output.push('<li>', escape(file.name), '</li>');
+                // You can perform additional operations with the file, such as uploading to a server.
+            }
+            document.getElementById('dropbox').innerHTML = '<ul>' + output.join('') + '</ul>';
+        }
+
+        // Allow users to click and choose files
+        document.getElementById("dropbox").addEventListener("click", function() {
+            var input = document.createElement('input');
+            input.type = 'file';
+            input.onchange = function() {
+                handleFiles(input.files);
+            };
+            input.click();
+        });
+    </script>
+
+</body>
+</html>
